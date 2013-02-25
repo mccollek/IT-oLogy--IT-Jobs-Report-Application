@@ -1,0 +1,42 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace c "mx.charts.chartClasses.*";
+
+
+global
+{
+	font-size: 10;
+}
+
+s|Panel
+{
+	font-size: 22;
+}
+
+s|Button
+{
+	font-size: 10;
+}
+
+s|TextInput
+{
+	font-size: 12;
+	textAlign: left;
+}
+
+s|List
+{
+	font-size: 14;
+}
+
+mx|DataTip
+{
+	font-size: 14;
+}
+
+c|ChartLabel
+{
+	font-size: 12;
+}
+	

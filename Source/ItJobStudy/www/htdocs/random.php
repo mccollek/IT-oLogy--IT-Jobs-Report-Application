@@ -1,6 +1,10 @@
 <?php
+/** 
+  * MySQL database connectscript 
+  * $ mysql_connect password variable must be changed prior to deployment
+  */
 $pk = $_GET["pk"];
-$connect = mysql_connect("localhost", "root", "connect2it");
+$connect = mysql_connect("localhost", "root", "");
   if (!$connect) {
     die("<div class=\"error\">" . mysql_error() . "</div>");
   }

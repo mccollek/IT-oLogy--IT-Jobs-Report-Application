@@ -1,5 +1,8 @@
 <?php
-
+/** 
+  * Occupation Data MySQL database script 
+  * $password variable must be changed prior to deployment
+  */
 class OccData {
 	var $connection;
 
@@ -7,7 +10,7 @@ class OccData {
 		$server = "localhost"; 
 		$port = "3306"; 
 		$username = "root"; 
-		$password = "connect2it"; 
+		$password = ""; 
 		$databasename = "itology"; 
 		$this->connection = mysqli_connect(
 			$server, $username, $password, $databasename, $port);

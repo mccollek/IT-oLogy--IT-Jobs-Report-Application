@@ -1,7 +1,11 @@
-<?php 
+<?php
+/** 
+  * Industry National Stats MySQL database script 
+  * $password variable must be changed prior to deployment
+  */ 
 class IndNationalStats { 
   var $username = "root"; 
-  var $password = "connect2it"; 
+  var $password = ""; 
   var $server = "localhost"; 
   var $port = "3306"; 
   var $databasename = "itology"; 

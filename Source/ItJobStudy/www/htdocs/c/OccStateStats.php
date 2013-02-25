@@ -1,7 +1,11 @@
-<?php 
+<?php
+/** 
+  * Occupation State Stats Class MySQL database script 
+  * $password variable must be changed prior to deployment
+  */
 class OccStateStats { 
   var $username = "root"; 
-  var $password = "connect2it"; 
+  var $password = ""; 
   var $server = "localhost"; 
   var $port = "3306"; 
   var $databasename = "itology"; 

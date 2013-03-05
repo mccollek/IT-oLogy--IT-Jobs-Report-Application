@@ -32,7 +32,7 @@ def parse_file(fileName, year):
 		return parse_file_format(fileName, year, sheetNo, initRow2001_10, col2000_08)
 	elif "2009" == year:
 		return parse_file_format(fileName, year, sheetNo, initRow2001_10, col2009)
-	elif "2010" == year:
+	elif "2010" == year or "2011" == year:
 		return parse_file_format(fileName, year, sheetNo, initRow2001_10, col2010)
 	else:
 		return "No format for year {0}".format(year)

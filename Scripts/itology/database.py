@@ -9,7 +9,7 @@ class Database:
 
 	def table_len(self, tblName):
 		import table
-		db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+		db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 		
 		table = table.Table(db, tblName)
 		return len(table)
@@ -17,7 +17,7 @@ class Database:
 	def insert_industry_region(self, regionList):
 		import regionTable
 
-		db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+		db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 		table = regionTable.RegionTable(db, "regions")
 		table.insert_industry_region(regionList)
 		db.commit()
@@ -26,7 +26,7 @@ class Database:
 	def insert_region(self, stateNo, stateAbrev, stateName, metroNo, metroName):
 		import regionTable
 
-		db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+		db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 		table = regionTable.RegionTable(db, "regions")
 		PK = table.insert(stateNo, stateAbrev, stateName, metroNo, metroName)
 		db.commit()
@@ -41,9 +41,9 @@ class Database:
 		for stats in occStats:
 			regionPK = self.insert_region(stats[0], stats[1], stats[2], "00000", "STATE")
 	
-			db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+			db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 
-			table = occStatsTable.OCCStatsTable(db, "occcupationsStats")
+			table = occStatsTable.OCCStatsTable(db, "occStats")
 			table.insert(regionPK, stats[3], stats[4], stats[5], stats[6], stats[7])
 
 			db.commit()
@@ -56,9 +56,9 @@ class Database:
 		for stats in occStats:
 			regionPK = self.insert_region("", stats[0], "", stats[1], stats[2])
 
-			db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+			db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 
-			table = occStatsTable.OCCStatsTable(db, "occupationsStats")
+			table = occStatsTable.OCCStatsTable(db, "occStats")
 			table.insert(regionPK, stats[3], stats[4], stats[5], stats[6], stats[7])
 
 			db.commit()
@@ -68,9 +68,9 @@ class Database:
 	def insert_industriesNames(self):
 		import industriesStatsTable
 
-		db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+		db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 
-		table = industriesStatsTable.IndStatsTable(db, "industriesStats")
+		table = industriesStatsTable.IndStatsTable(db, "indStats")
 		table.insert_industries_names()
 
 		db.commit()
@@ -86,9 +86,9 @@ class Database:
 			#No info on state abbreviation, state name, metro number, or metro name
 			regionPK = self.insert_region(stats[0], "", "", "00000", "STATE")
 	
-			db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+			db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 
-			table = industriesStatsTable.IndStatsTable(db, "industriesStats")
+			table = industriesStatsTable.IndStatsTable(db, "indStats")
 			table.insert(regionPK, stats[1], stats[2], "INDUSTRY_NAME", stats[3],\
 				stats[4], stats[5], stats[6], stats[7], stats[8])
 
@@ -100,14 +100,14 @@ class Database:
 		import industriesStatsTable
 		import regionTable
 
-		db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+		db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 		for stats in industryStats:
 			table = regionTable.RegionTable(db, "regions")
 			stateNo = table.get_stateNo_from_metroNo(stats[0])
 			assert -1 != stateNo
 			regionPK = self.insert_region(stateNo, "", "", stats[0], "")
 	
-			table = industriesStatsTable.IndStatsTable(db, "industriesStats")
+			table = industriesStatsTable.IndStatsTable(db, "indStats")
 			table.insert(regionPK, stats[1], stats[2], "", stats[3],\
 				stats[4], stats[5], stats[6], stats[7], stats[8])
 
@@ -117,7 +117,7 @@ class Database:
 	def create_occ_states_salaries_csv(self):
 		import occStatsTable
 
-		db = MySQLdb.connect(db=self.dbName, user=self.usrName)
+		db = MySQLdb.connect(db=self.dbName, user=self.usrName,passwd="*****",host="127.0.0.1",port=3306)
 
 		table = occStatsTable.OCCStatsTable(db, "occupationsStats")
 		table.query_occ_states_salaries()

@@ -8,16 +8,16 @@ import MySQLdb
 class OCCStatsTable(table.Table):
 	def insert_occupation(self, occ, occName):
 		#query for existence
-		res = self.dbc.execute("SELECT * FROM occupations WHERE occ = '%s'"%(occ))
+		res = self.dbc.execute("SELECT * FROM occNames WHERE occ = '%s'"%(occ))
 
 		if 0 == res:
 			#does not exist, insert
-			self.dbc.execute("""INSERT INTO occupations (occ, occName)
+			self.dbc.execute("""INSERT INTO occNames (occ, occName)
 				VALUES ('%s', '%s')"""%\
 				(occ, MySQLdb.escape_string(occName)))
 
 			#query for primary key
-			res = self.dbc.execute("SELECT * FROM occupations WHERE occ = '%s'"%(occ))
+			res = self.dbc.execute("SELECT * FROM occNames WHERE occ = '%s'"%(occ))
 
 		#return primary key
 		return self.dbc.fetchone()[0]
@@ -30,8 +30,8 @@ class OCCStatsTable(table.Table):
 			return -1
 
 		PK = self.insert_occupation(occ, occName)
-		query = """SELECT * FROM occupationsStats 
-			WHERE FK_region = '%s' AND FK_occ = '%s' AND jobs = '%s'
+		query = """SELECT * FROM occStats 
+			WHERE fk_reg = '%s' AND fk_occ = '%s' AND jobs = '%s'
 				AND salary = '%s' AND year = '%s'"""
 
 		#query for existence
@@ -39,8 +39,8 @@ class OCCStatsTable(table.Table):
 
 		if 0 == res:
 			#does not exist, insert
-			res = self.dbc.execute("""INSERT INTO occupationsStats 
-				(FK_region, FK_occ, jobs, salary, year)
+			res = self.dbc.execute("""INSERT INTO occStats 
+				(fk_reg, fk_occ, jobs, salary, year)
 				VALUES('%s', '%s', '%s', '%s', '%s')"""\
 				%(regionPK, PK, jobs, salary, year))
 
@@ -52,14 +52,14 @@ class OCCStatsTable(table.Table):
 
 	def query_occ_states_jobs(self):
 		self.query_occ_states(\
-			"""SELECT occupations.occ, states.stateAbrev, occupationsStats.jobs,
-				occupationsStats.year
-			FROM regions, states, occupations, occupationsStats, metros
-			WHERE occupationsStats.FK_region = regions.PK_region
-				AND occupationsStats.FK_occ = occupations.PK_occ
-				AND occupations.occ != '00-0000'
-				AND regions.FK_metro = metros.PK_metro
-				AND regions.FK_state = states.PK_state
+			"""SELECT occNames.occ, states.stateAbr, occStats.jobs,
+				occStats.year
+			FROM regions, states, occNames, occStats, metros
+			WHERE occStats.fk_reg = regions.pk_reg
+				AND occStats.fk_occ = occNames.pk_occ
+				AND occNames.occ != '00-0000'
+				AND regions.fk_metro = metros.pk_metro
+				AND regions.fk_state = states.pk_state
 				AND metros.metroNo = '0000000'
 				AND ( """,\
 			"State-Jobs.csv")
@@ -67,14 +67,14 @@ class OCCStatsTable(table.Table):
 
 	def query_occ_states_salaries(self):
 		self.query_occ_states(\
-			"""SELECT occupations.occ, states.stateAbrev, occupationsStats.salary,
-				occupationsStats.year
-			FROM regions, states, occupations, occupationsStats, metros
-			WHERE occupationsStats.FK_occ = occupations.PK_occ
-				AND occupationsStats.FK_region = regions.PK_region
-				AND occupations.occ != '00-0000'
-				AND regions.FK_state = states.PK_state
-				AND regions.FK_metro = metros.PK_metro
+			"""SELECT occNames.occ, states.stateAbr, occStats.salary,
+				occStats.year
+			FROM regions, states, occNames, occStats, metros
+			WHERE occStats.fk_occ = occnames.pk_occ
+				AND occStats.fk_reg = regions.pk_reg
+				AND occNames.occ != '00-0000'
+				AND regions.fk_state = states.pk_state
+				AND regions.fk_metro = metros.pk_metro
 				AND metros.metroNo = '0000000'
 				AND ( """,\
 			"State-Salaries.csv")			
@@ -85,19 +85,19 @@ class OCCStatsTable(table.Table):
 		occCodes = occParser.get_occ_codes()
 		csv = []
 
-		query += "occupations.occ = '{0}'\n".format(occCodes[0])
+		query += "occNames.occ = '{0}'\n".format(occCodes[0])
 		for i in range(1, len(occCodes)):
-			query += "\nOR occupations.occ = '{0}'".format(occCodes[i])
+			query += "\nOR occNames.occ = '{0}'".format(occCodes[i])
 
 		query += """ )
 			ORDER BY states.stateNo,
-				occupations.occ,
-				occupationsStats.year desc;"""
+				occNames.occ,
+				occStats.year desc;"""
 
 		self.db.query(query)
 		store = self.db.store_result()
 
-		year = 2010
+		year = 2011
 		row = store.fetch_row()[0]
 		csvRow = [row[0], row[1]]
 		while row:
@@ -111,29 +111,29 @@ class OCCStatsTable(table.Table):
 				csvRow.append('*')
 
 			if(2000 == year):
-				year = 2010
+				year = 2011
 				csv.append(csvRow)
 				csvRow = [row[0], row[1]]
 			else:
 				year -= 1 
 
 		with open(fileName, 'wb') as fileHandle:
-			fileHandle.write("OCC,STATE,2010,2009,2008,2007,2006,2005,2004,2003,2002,2001,\
+			fileHandle.write("OCC,STATE,2011,2010,2009,2008,2007,2006,2005,2004,2003,2002,2001,\
 2000\n")
-			strCSV = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}\n"
+			strCSV = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}\n"
 			for line in csv:
 				fileHandle.write(strCSV.format(line[0], line[1], line[2], line[3],\
 					line[4], line[5], line[6], line[7], line[8], line[9], line[10],\
-					line[11], line[12]))
+					line[11], line[12], line[13]))
 
 
 	def query_occ_metros_jobs(self):
 		self.query_occ_metros(
-			"""SELECT occupations.occ, states.stateAbrev, metros.metroName,\
-				occupationsStats.jobs, occupationsStats.year
-			FROM regions, states, occupations, occupationsStats, metros
-			WHERE occupationsStats.FK_region = regions.PK_region
-				AND occupationsStats.FK_occ = occupations.PK_occ
+			"""SELECT occNames.occ, states.stateAbr, metros.metroName,\
+				occStats.jobs, occStats.year
+			FROM regions, states, occNames, occStats, metros
+			WHERE occStats.FK_reg = regions.PK_reg
+				AND occStats.FK_occ = occNames.PK_occ
 				AND regions.FK_metro = metros.PK_metro
 				AND regions.FK_state = states.PK_state
 				AND metros.metroNo != '0000000'
@@ -142,11 +142,11 @@ class OCCStatsTable(table.Table):
 
 	def query_occ_metros_salaries(self):
 		self.query_occ_metros(
-			"""SELECT occupations.occ, states.stateAbrev, metros.metroName,\
-				occupationsStats.salary, occupationsStats.year
-			FROM regions, states, occupations, occupationsStats, metros
-			WHERE occupationsStats.FK_region = regions.PK_region
-				AND occupationsStats.FK_occ = occupations.PK_occ
+			"""SELECT occNames.occ, states.stateAbr, metros.metroName,\
+				occStats.salary, occStats.year
+			FROM regions, states, occNames, occStats, metros
+			WHERE occStats.FK_reg = regions.PK_reg
+				AND occStats.FK_occ = occNames.PK_occ
 				AND regions.FK_metro = metros.PK_metro
 				AND regions.FK_state = states.PK_state
 				AND metros.metroNo != '0000000'
@@ -159,20 +159,20 @@ class OCCStatsTable(table.Table):
 		occCodes = occParser.get_occ_codes()
 		csv = []
 
-		query += "occupations.occ = '{0}'\n".format(occCodes[0])
+		query += "occNames.occ = '{0}'\n".format(occCodes[0])
 		for i in range(1, len(occCodes)):
-			query += "\nOR occupations.occ = '{0}'".format(occCodes[i])
+			query += "\nOR occNames.occ = '{0}'".format(occCodes[i])
 
 		query += """ )
 			ORDER BY states.stateNo,
 				metros.metroNo,
-				occupations.occ,
-				occupationsStats.year desc;"""
+				occNames.occ,
+				occStats.year desc;"""
 
 		self.db.query(query)
 		store = self.db.store_result()
 
-		year = 2010
+		year = 2011
 		row = store.fetch_row()[0]
 		csvRow = [row[0], row[1], row[2]]
 		while row:
@@ -186,20 +186,20 @@ class OCCStatsTable(table.Table):
 				csvRow.append('*')
 
 			if(2000 == year):
-				year = 2010
+				year = 2011
 				csv.append(csvRow)
 				csvRow = [row[0], row[1], row[2]]
 			else:
 				year -= 1 
 
 		with open(fileName, 'wb') as fileHandle:
-			fileHandle.write("OCC;STATE;METROS;2010;2009;2008;2007;2006;2005;2004;2003;\
+			fileHandle.write("OCC;STATE;METROS;2011;2010;2009;2008;2007;2006;2005;2004;2003;\
 2002;2001;2000\n")
-			strCSV = "{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13}\n" 
+			strCSV = "{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};{14}\n" 
 			for line in csv:
 				fileHandle.write(strCSV.format(line[0], line[1], line[2], line[3],\
 					line[4], line[5], line[6], line[7], line[8], line[9], line[10],\
-					line[11], line[12], line[13]))
+					line[11], line[12], line[13], line[14]))
 
 
 

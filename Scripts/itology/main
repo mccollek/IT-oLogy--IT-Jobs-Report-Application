@@ -20,11 +20,11 @@ def parse_occ_state_file(fileName, year):
 	import database
 	import occParser
 
-	stateDataList = occParser.get_data_list(fileName, year)
-	for stateData in stateDataList: print stateData
-	return
+	stateDataList = occParser.parse_file(fileName, year)
+	for stateData in stateDataList: print (stateData)
+	
 
-	db = database.Database("IToLogy", "itology")
+	db = database.Database("itology", "root")
 	db.insert_state_occ(stateDataList)
 	return
 
@@ -34,9 +34,9 @@ def parse_occ_metro_file(fileName, year):
 	import occParser
 
 	stateDataList = occParser.parse_file(fileName, year)
-	for stateData in stateDataList: print stateData
+	for stateData in stateDataList: print (stateData)
 
-	db = database.Database("IToLogy", "itology")
+	db = database.Database("itology", "root")
 	db.insert_metro_occ(stateDataList)
 	return
 
@@ -46,7 +46,7 @@ def parse_industry_file(fileName):
 
 	industryDataList = industryParser.get_data_list_formatENB(fileName)
 
-	db = database.Database("IToLogy", "itology")
+	db = database.Database("itology", "root")
 	db.insert_state_industry(industryDataList)
 	return
 
@@ -56,14 +56,14 @@ def parse_industry_metro_file(fileName):
 
 	industryDataList = industryParser.get_data_list_metro_formatENB(fileName)
 
-	db = database.Database("IToLogy", "itology")
+	db = database.Database("itology", "root")
 	db.insert_metro_industry(industryDataList)
 	return
 
 def create_state_CSVs():
 	import database
 
-	db = database.Database("IToLogy", "itology")
+	db = database.Database("itology", "root")
 	db.create_occ_states_jobs_csv()
 	db.create_occ_states_salaries_csv()
 	return
@@ -72,7 +72,7 @@ def create_state_CSVs():
 def create_metros_CSVs():
 	import database
 
-	db = database.Database("IToLogy", "itology")
+	db = database.Database("itology", "root")
 	db.create_occ_metros_salaries_csv()
 	db.create_occ_metros_jobs_csv()
 	return
@@ -81,7 +81,7 @@ def create_metros_CSVs():
 def create_industry_CSVs():
 	import database
 
-	db = database.Database("IToLogy", "itology")
+	db = database.Database("itology", "root")
 	db.create_industry_jobs_csv()
 	db.create_industry_salaries_csv()
 	db.create_industry_orgs_csv()
@@ -102,9 +102,9 @@ def main():
 			return
 
 	if "OccState" == fileFormat:
-		parse_state_file(fileName, year)
+		parse_occ_state_file(fileName, year)
 	elif "OccMetro" == fileFormat:
-		parse_metro_file(fileName, year)
+		parse_occ_metro_file(fileName, year)
 	elif "IndState" == fileFormat:
 		parse_industry_file(fileName)
 	elif "IndMetro" == fileFormat:

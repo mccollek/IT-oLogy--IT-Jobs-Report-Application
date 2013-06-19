@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./main --year 2002 --format state --file data/occ_2002/state_2002_dl.xls
+./main --year 2002 --format metro --file data/occ_2002/MSA_2002_dl_1.xls
+./main --year 2002 --format metro --file data/occ_2002/MSA_2002_dl_2.xls
+

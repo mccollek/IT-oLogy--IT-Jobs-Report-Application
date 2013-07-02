@@ -1,0 +1,43 @@
+This is the code for IT-oLogy's itjobstudy.com site.  
+Copyright 2011 IT-ology/CESM a program of the SC Research Foundation
+Licensed under the Gnu GPL
+
+    This file is part of the 'IT Job Study' software.
+
+    The  'IT Job Study' software is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    The  'IT Job Study' software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+Licensing questions?  Please contact us at:
+http://www.it-ology.org
+
+
+--Current Version--
+* Python scripts to transform BLS data into SQL inserts
+* PHP to display front page graphics leveraging Google Maps
+* Adobe flex interface for reporting on various regions, occupations, and industries in IT.
+
+We would love contributions to the code!  Our plan is to eventually migrate the Flex interface to HTML5/Javascript
+
+Credit for the initial creation and subsequent design ideas of this application go to the USC Intern Team for IT-oLogy:
+
+Liz Buncher
+Chaise Daigle
+Lonnie Emard
+Jeremy Lewis
+Karl McCollester (@karlmccollester)
+Chris Richardson
+
+
+Additional Contributers are:
+Theresa Huggins
+Danny Arant

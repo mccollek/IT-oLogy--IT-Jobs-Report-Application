@@ -1,0 +1,12 @@
+pay: flat rate
+
+Function to get list of all states.
+Function to get list of all years.
+ 
+
+National IT Occupation/Industry Job Growth: (year, job total)
+National IT Occupation/Industry Salary Growth: (year, salary average)
+National IT Occupation/Industry Total %GDP: (year, %GDP)
+
+  
+

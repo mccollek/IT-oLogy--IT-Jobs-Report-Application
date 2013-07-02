@@ -1,0 +1,11 @@
+#! /bin/bash
+
+./main --year 2011 --format OccState --file data/occ_2011/state_M2011_dl.xls --action none
+./main --year 2011 --format OccMetro --file data/occ_2011/aMSA_M2011_dl.xls --action none
+./main --year 2011 --format OccMetro --file data/occ_2011/MSA_M2011_dl_1_AK_IN.xls --action none
+./main --year 2011 --format OccMetro --file data/occ_2011/MSA_M2011_dl_2_KS_NY.xls --action none
+./main --year 2011 --format OccMetro --file data/occ_2011/MSA_M2011_dl_3_OH_WY.xls --action none
+./main --year 2011 --format OccMetro --file data/occ_2011/BOS_M2011_dl.xls  --action none
+
+
+

@@ -1,0 +1,119 @@
+#! /usr/bin/env python
+
+import xlrd
+
+def process_commandline():
+	import argparse
+	
+	parser = argparse.ArgumentParser(description='Parse Employment Files.')
+	parser.add_argument('--file', type=str, help='file to be parsed')
+	parser.add_argument('--format', type=str, help='format of file to be parsed')
+	parser.add_argument("--year", type=str, help="year of file")
+	parser.add_argument("--action", type=str, help="action main should take")
+
+	args = parser.parse_args()
+	
+	return args.file, args.format, args.year, args.action
+
+
+def parse_occ_state_file(fileName, year):
+	import database
+	import occParser
+
+	stateDataList = occParser.parse_file(fileName, year)
+	for stateData in stateDataList: print (stateData)
+	
+
+	db = database.Database("itology", "root")
+	db.insert_state_occ(stateDataList)
+	return
+
+
+def parse_occ_metro_file(fileName, year):
+	import database
+	import occParser
+
+	stateDataList = occParser.parse_file(fileName, year)
+	for stateData in stateDataList: print (stateData)
+
+	db = database.Database("itology", "root")
+	db.insert_metro_occ(stateDataList)
+	return
+
+def parse_industry_file(fileName):
+	import industryParser
+	import database
+
+	industryDataList = industryParser.get_data_list_formatENB(fileName)
+
+	db = database.Database("itology", "root")
+	db.insert_state_industry(industryDataList)
+	return
+
+def parse_industry_metro_file(fileName):
+	import industryParser
+	import database
+
+	industryDataList = industryParser.get_data_list_metro_formatENB(fileName)
+
+	db = database.Database("itology", "root")
+	db.insert_metro_industry(industryDataList)
+	return
+
+def create_state_CSVs():
+	import database
+
+	db = database.Database("itology", "root")
+	db.create_occ_states_jobs_csv()
+	db.create_occ_states_salaries_csv()
+	return
+
+
+def create_metros_CSVs():
+	import database
+
+	db = database.Database("itology", "root")
+	db.create_occ_metros_salaries_csv()
+	db.create_occ_metros_jobs_csv()
+	return
+
+
+def create_industry_CSVs():
+	import database
+
+	db = database.Database("itology", "root")
+	db.create_industry_jobs_csv()
+	db.create_industry_salaries_csv()
+	db.create_industry_orgs_csv()
+	return
+
+def main():
+	fileName, fileFormat, year, action = process_commandline()
+
+	if "query" == action:
+		if "OccState" == fileFormat:
+			create_state_CSVs()
+			return
+		if "OccMetro" == fileFormat:
+			create_metros_CSVs()
+			return
+		if "IndState" == fileFormat:
+			create_industry_CSVs()
+			return
+
+	if "OccState" == fileFormat:
+		parse_occ_state_file(fileName, year)
+	elif "OccMetro" == fileFormat:
+		parse_occ_metro_file(fileName, year)
+	elif "IndState" == fileFormat:
+		parse_industry_file(fileName)
+	elif "IndMetro" == fileFormat:
+		parse_industry_metro_file(fileName)
+	else:
+		assert False, "unknown format"
+	return
+
+
+if "__main__" == __name__: main()
+
+

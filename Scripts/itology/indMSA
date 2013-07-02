@@ -1,0 +1,2 @@
+./main --file ~/Downloads/allmsa07.enb --format IndMetro && ./main --file ~/Downloads/allmsa06.enb --format IndMetro && ./main --file ~/Downloads/allmsa05 --format IndMetro && ./main --file ~/Downloads/allmsa04.enb --format IndMetro && ./main --file ~/Downloads/allmsa03 --format IndMetro && ./main --file ~/Downloads/allmsa02.enb --format IndMetro && ./main --file ~/Downloads/allmsa01 --format IndMetro && ./main --file ~/Downloads/ALLMSA00.ENB --format IndMetro
+
